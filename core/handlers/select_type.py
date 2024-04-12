@@ -5,7 +5,7 @@ from aiogram.filters import StateFilter
 from ..keyboards.clothes import get_clothes_kb
 from aiogram.fsm.context import FSMContext
 from ..utils.statesform import StepsForm
-from ..utils.weight import clothes
+from ..utils.weight import clothes, profit
 from ..utils.get_cost import get_final_cost
 from ..keyboards.end_kb import get_end_kb
 
@@ -44,9 +44,10 @@ async def get_size(callback:CallbackQuery, state: FSMContext):
     cost_item = user_data['cost']
     type = user_data['type']
     size = user_data['size']
-    weight_cost = clothes[type][size]    
+    weight_cost = clothes[type][size]
     #рассчитать стоимость используя вес в юанях
-    final_cost = get_final_cost(cost_item, weight_cost)
+    profit_vov = profit[type]
+    final_cost = get_final_cost(cost_item, weight_cost, profit_vov)
     await state.clear()
-    await callback.message.answer(f"Итоговая цена: {final_cost}", reply_markup=get_end_kb())
+    await callback.message.answer(f"Итоговая цена: {final_cost} BYN")
     
